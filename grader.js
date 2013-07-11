@@ -52,24 +52,24 @@ var checkHtmlFileOut = function(checksfile) {
         var present = $(checks[ii]).length > 0;
         out[checks[ii]] = present;
     }
-		console.log(JSON.stringify(out, null, 4));
+    console.log(JSON.stringify(out, null, 4));
 };
 
 var checkHtmlFile = function(htmlfile, checksfile, url) {
     if (url) {
-		    rest.get(url).on('complete', function(result) {
+        rest.get(url).on('complete', function(result) {
             if (result instanceof Error) {
-						    console.log('Error', result.message);
-								process.exit(1);
-						} else {
+                console.log('Error', result.message);
+                process.exit(1);
+            } else {
                 $ = cheerio.load(result);
-				        checkHtmlFileOut(checksfile);
-						}
-				});
-		} else {
+                checkHtmlFileOut(checksfile);
+            }
+        });
+    } else {
         $ = cheerioHtmlFile(htmlfile);
-				checkHtmlFileOut(checksfile);
-		}
+        checkHtmlFileOut(checksfile);
+    }
 };
 
 var clone = function(fn) {
@@ -82,7 +82,7 @@ if(require.main == module) {
     program
         .option('-f, --file <html_file>', 'Path to index.html', clone(assertFileExists), HTMLFILE_DEFAULT)
         .option('-c, --checks <check_file>', 'Path to checks.json', clone(assertFileExists), CHECKSFILE_DEFAULT)
-				.option('-u, --url <url_path>', 'Url Path to web.js')
+        .option('-u, --url <url_path>', 'Url Path to web.js')
         .parse(process.argv);
     checkHtmlFile(program.file, program.checks, program.url);
 } else {
